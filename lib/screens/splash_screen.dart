@@ -1,6 +1,6 @@
+import 'package:animal_kart_demo2/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -14,54 +14,59 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   @override
   void initState() {
     super.initState();
-    // Navigate to login screen after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushReplacementNamed(context, AppRoutes.onBoardingScreen);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    const Color animalKartGreen = Color(0xFF3A8F8A);
+   
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: animalKartGreen,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // App Logo/Icon
+            // Logo inside branded circle
             Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                color: Colors.deepPurple.shade100,
+              width: 150,
+              height: 150,
+              decoration: const BoxDecoration(
+                color: animalKartGreen,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.pets, size: 60, color: Colors.deepPurple),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Image.asset(
+                  'assets/images/onboard_logo.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
+
             const SizedBox(height: 24),
-            // App Name with nice typography
+
+            // App Name
             const Text(
-              'AnimalKart',
+              'ANIMAL\nKART',
+              textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.deepPurple,
+                fontSize: 34,
+                fontWeight: FontWeight.w900,
                 letterSpacing: 1.2,
+                height: 1.1,
+                color: animalKartGreen,
               ),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Your Pet Care Companion',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-                letterSpacing: 0.5,
-              ),
-            ),
-            // Loading indicator at the bottom
-            const SizedBox(height: 48),
+
+            const SizedBox(height: 40),
+
+            // Loader
             const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple),
+              valueColor: AlwaysStoppedAnimation<Color>(animalKartGreen),
             ),
           ],
         ),

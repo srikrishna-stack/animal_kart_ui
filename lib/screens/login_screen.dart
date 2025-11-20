@@ -35,7 +35,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
               const SizedBox(height: 30),
 
-              /// Phone Input
               TextField(
                 controller: phoneController,
                 keyboardType: TextInputType.phone,

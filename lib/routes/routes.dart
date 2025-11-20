@@ -1,3 +1,4 @@
+import 'package:animal_kart_demo2/screens/onboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animal_kart_demo2/screens/splash_screen.dart';
 import 'package:animal_kart_demo2/screens/login_screen.dart';
@@ -11,11 +12,14 @@ class AppRoutes {
   static const String otp = '/otp';
   static const String profileForm = '/profile-form';
   static const String home = '/home';
+  static const String onBoardingScreen = '/onboarding_screen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case onBoardingScreen:
+        return MaterialPageRoute(builder: (_) => const OnboardingScreen());
       case login:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case otp:
