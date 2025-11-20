@@ -29,6 +29,15 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
+	<key>NSCameraUsageDescription</key>
+	<string>We need camera access to capture Aadhaar card.</string>
+
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need photo library access to upload Aadhaar images.</string>
+
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need access to save uploaded images.</string>
+
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>

@@ -1,9 +1,9 @@
 import 'package:animal_kart_demo2/screens/onboard_screen.dart';
+import 'package:animal_kart_demo2/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animal_kart_demo2/screens/splash_screen.dart';
 import 'package:animal_kart_demo2/screens/login_screen.dart';
 import 'package:animal_kart_demo2/screens/otp_screen.dart';
-import 'package:animal_kart_demo2/screens/profile_form_screen.dart';
 import 'package:animal_kart_demo2/screens/home_screen.dart';
 
 class AppRoutes {
@@ -27,7 +27,7 @@ class AppRoutes {
       case profileForm:
         final phoneNumber = settings.arguments as String? ?? '';
         return MaterialPageRoute(
-          builder: (_) => ProfileFormScreen(mobileNumber: phoneNumber),
+          builder: (_) => RegisterScreen(phoneNumberFromLogin: phoneNumber),
         );
       case home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());

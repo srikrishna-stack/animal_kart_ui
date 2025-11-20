@@ -1,23 +1,24 @@
 import 'dart:io';
-import 'package:animal_kart_demo2/providers/auth_provider.dart';
 import 'package:animal_kart_demo2/routes/routes.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pinput/pinput.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/material.dart';
+import 'package:pinput/pinput.dart';
 
-class OtpScreen extends ConsumerStatefulWidget {
-  const OtpScreen({super.key});
+class OtpScreen extends StatefulWidget {
+  
+
+  const OtpScreen({super.key,});
 
   @override
-  ConsumerState<OtpScreen> createState() => _OtpScreenState();
+  State<OtpScreen> createState() => _OtpScreenState();
 }
 
-class _OtpScreenState extends ConsumerState<OtpScreen> {
+class _OtpScreenState extends State<OtpScreen> {
   final otpController = TextEditingController();
 
   String deviceId = "";
   String deviceModel = "";
+  bool isOtpValid = false; // 🔥 Controls button enable
 
   @override
   void initState() {
@@ -45,15 +46,10 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = ref.watch(authProvider);
-
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
-      textStyle: const TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
+      textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -62,99 +58,97 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     );
 
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Enter OTP",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+              // ----- BACK BUTTON -----
+              IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new),
+                onPressed: () => Navigator.pop(context),
+              ),
+
               const SizedBox(height: 10),
-              const Text(
-                "A 6-digit OTP has been sent to your phone.",
-                style: TextStyle(fontSize: 15, color: Colors.grey),
+
+              // ---- TITLE ----
+              Text(
+                "Please enter the code we just sent to",
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+              Text(
+                "(+91) 123456789",
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
 
               const SizedBox(height: 30),
 
-              /// OTP Input
-              Pinput(
-                controller: otpController,
-                length: 6,
-                defaultPinTheme: defaultPinTheme,
-                pinAnimationType: PinAnimationType.scale,
-                autofocus: true,
-                onCompleted: (value) {
-                  ref.read(authProvider.notifier).verifyOtp(
-                        value,
-                        deviceId,
-                        deviceModel,
-                      );
-
-                  if (ref.read(authProvider).isVerified) {
-                    // Get the phone number from the auth provider or pass it from login
-                    final phoneNumber = ref.read(authProvider).phoneNumber;
-                    Navigator.pushReplacementNamed(
-                      context,
-                      AppRoutes.profileForm,
-                      arguments: phoneNumber,
-                    );
-                  }
-                },
-              ),
-
-              if (auth.error.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Text(
-                    auth.error,
-                    style: const TextStyle(color: Colors.red, fontSize: 14),
-                  ),
+              // ---- OTP INPUT ----
+              Center(
+                child: Pinput(
+                  controller: otpController,
+                  length: 6,
+                  defaultPinTheme: defaultPinTheme,
+                  onChanged: (value) {
+                    setState(() {
+                      isOtpValid = value.length == 6;
+                    });
+                  },
                 ),
+              ),
 
               const SizedBox(height: 20),
 
-              /// Submit OTP button
+              Center(
+                child: TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    "Resend OTP",
+                    style: TextStyle(
+                        fontSize: 16,
+                        decoration: TextDecoration.underline,
+                        color: Colors.black),
+                  ),
+                ),
+              ),
+
+              const Spacer(),
+
+              // ---- CONTINUE BUTTON ----
               SizedBox(
                 width: double.infinity,
+                height: 60,
                 child: ElevatedButton(
-                  onPressed: () {
-                    ref.read(authProvider.notifier).verifyOtp(
-                          otpController.text.trim(),
-                          deviceId,
-                          deviceModel,
-                        );
-
-                    if (ref.read(authProvider).isVerified) {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/main-home',
-                        (route) => false,
-                      );
-                    }
-                  },
+                  onPressed: isOtpValid
+                      ? () {
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.profileForm);
+                        }
+                      : null, // Disabled when invalid
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    backgroundColor: isOtpValid
+                        ? const Color(0xFF57BE82)
+                        : Colors.grey.shade300,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(35),
                     ),
                   ),
                   child: const Text(
-                    "Submit OTP",
-                    style: TextStyle(fontSize: 18),
+                    "Continue",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
                 ),
               ),
 
               const SizedBox(height: 20),
-
-              /// 👀 (Optional debugging)
-              Text("Device ID: $deviceId",
-                  style: const TextStyle(fontSize: 12, color: Colors.grey)),
-              Text("Device Model: $deviceModel",
-                  style: const TextStyle(fontSize: 12, color: Colors.grey)),
             ],
           ),
         ),
